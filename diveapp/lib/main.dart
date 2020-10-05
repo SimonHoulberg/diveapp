@@ -4,6 +4,9 @@ import 'package:diveapp/pages/profile_Page.dart';
 import 'package:diveapp/pages/settings_Page.dart';
 import 'package:flutter/material.dart';
 
+PageController pageController = PageController(initialPage: 0);
+int currentIndex = 0;
+
 void main() {
   runApp(diveApp());
 }

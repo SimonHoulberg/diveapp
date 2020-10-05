@@ -1,3 +1,5 @@
+import 'package:diveapp/bottom_Nav_Bar.dart';
+import 'package:diveapp/main.dart';
 import 'package:diveapp/pages/dive_Log_Page.dart';
 import 'package:diveapp/pages/profile_Page.dart';
 import 'package:diveapp/pages/settings_Page.dart';
@@ -14,7 +16,11 @@ class Home_Page extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: PageView(children: navBarPages),
+      body: PageView(
+          controller: pageController,
+          physics: NeverScrollableScrollPhysics(),
+          children: navBarPages),
+      bottomNavigationBar: Bottom_Nav_Bar(),
     );
   }
 }
