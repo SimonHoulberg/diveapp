@@ -6,7 +6,7 @@ class Bottom_Nav_Bar_Item extends StatelessWidget {
   final int id;
   final Function setPage;
 
-  const Bottom_Nav_Bar_Item(this.setPage, this.icon, this.id);
+  const Bottom_Nav_Bar_Item({this.setPage, this.icon, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,14 @@ class Bottom_Nav_Bar_Item extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         child: CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.white.withOpacity(0.9),
+          backgroundColor: currentIndex == id
+              ? Colors.white.withOpacity(0.9)
+              : Colors.transparent,
           child: Icon(
             icon,
-            color: Colors.black,
+            color: currentIndex == id
+                ? Colors.black
+                : Colors.white.withOpacity(0.9),
           ),
         ),
       ),

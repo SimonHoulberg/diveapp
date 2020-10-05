@@ -23,7 +23,7 @@ class diveApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dive App',
       theme: ThemeData(
-        primarySwatch: Colors.cyan,
+        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // extendBody: true,

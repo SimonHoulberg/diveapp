@@ -10,9 +10,9 @@ class Bottom_Nav_Bar extends StatefulWidget {
 
 class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
   setPage() {
-    setState() {
+    setState(() {
       pageController.jumpToPage(currentIndex);
-    }
+    });
   }
 
   @override
@@ -45,11 +45,14 @@ class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Bottom_Nav_Bar_Item(setPage, Icons.face, 0),
+                  Bottom_Nav_Bar_Item(
+                      setPage: setPage, icon: Icons.face, id: 0),
                   Container(),
-                  Bottom_Nav_Bar_Item(setPage, Icons.list, 1),
+                  Bottom_Nav_Bar_Item(
+                      setPage: setPage, icon: Icons.list, id: 1),
                   Container(),
-                  Bottom_Nav_Bar_Item(setPage, Icons.settings, 2)
+                  Bottom_Nav_Bar_Item(
+                      setPage: setPage, icon: Icons.settings, id: 2)
                 ],
               ),
             ),
