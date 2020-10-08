@@ -78,7 +78,7 @@ class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
