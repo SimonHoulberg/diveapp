@@ -1,4 +1,4 @@
-import 'package:diveapp/pages/dive_Log_Page.dart';
+import 'package:diveapp/pages/DiveLogPage.dart';
 import 'package:diveapp/pages/home_Page.dart';
 import 'package:diveapp/pages/profile_Page.dart';
 import 'package:diveapp/pages/settings_Page.dart';
@@ -14,7 +14,7 @@ void main() {
 class diveApp extends StatelessWidget {
   List<Widget> navBarScreens = [
     Profile_Page(),
-    Dive_Log_Page(),
+    DiveLogPage(),
     Settings_Page(),
   ];
 
