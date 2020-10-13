@@ -1,14 +1,15 @@
-import 'package:diveapp/bottom_Nav_Bar_Item.dart';
 import 'package:diveapp/main.dart';
-import 'package:diveapp/wave_Clipper.dart';
 import 'package:flutter/material.dart';
 
-class Bottom_Nav_Bar extends StatefulWidget {
+import 'BottomNavBarItem.dart';
+import 'WaveClipper.dart';
+
+class BottomNavBar extends StatefulWidget {
   @override
-  _Bottom_Nav_BarState createState() => _Bottom_Nav_BarState();
+  _BottomNavBarState createState() => _BottomNavBarState();
 }
 
-class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
+class _BottomNavBarState extends State<BottomNavBar> {
   setPage() {
     setState(() {
       pageController.jumpToPage(currentIndex);
@@ -26,7 +27,7 @@ class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
             Positioned(
               bottom: 0,
               child: ClipPath(
-                  clipper: Wave_Clipper(),
+                  clipper: WaveClipper(),
                   child: Container(
                       height: 60,
                       width: MediaQuery.of(context).size.width,
@@ -45,13 +46,11 @@ class _Bottom_Nav_BarState extends State<Bottom_Nav_Bar> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Bottom_Nav_Bar_Item(
-                      setPage: setPage, icon: Icons.face, id: 0),
+                  BottomNavBarItem(setPage: setPage, icon: Icons.face, id: 0),
                   Container(),
-                  Bottom_Nav_Bar_Item(
-                      setPage: setPage, icon: Icons.list, id: 1),
+                  BottomNavBarItem(setPage: setPage, icon: Icons.list, id: 1),
                   Container(),
-                  Bottom_Nav_Bar_Item(
+                  BottomNavBarItem(
                       setPage: setPage, icon: Icons.settings, id: 2)
                 ],
               ),

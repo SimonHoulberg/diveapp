@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mock_data/mock_data.dart';
 
 class DiveLogTitle extends StatelessWidget {
   @override

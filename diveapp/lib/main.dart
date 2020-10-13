@@ -1,23 +1,14 @@
-import 'package:diveapp/pages/DiveLogPage.dart';
-import 'package:diveapp/pages/home_Page.dart';
-import 'package:diveapp/pages/profile_Page.dart';
-import 'package:diveapp/pages/settings_Page.dart';
+import 'package:diveapp/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 
 PageController pageController = PageController(initialPage: 0);
 int currentIndex = 0;
 
 void main() {
-  runApp(diveApp());
+  runApp(DiveApp());
 }
 
-class diveApp extends StatelessWidget {
-  List<Widget> navBarScreens = [
-    Profile_Page(),
-    DiveLogPage(),
-    Settings_Page(),
-  ];
-
+class DiveApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +18,7 @@ class diveApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // extendBody: true,
-      home: Home_Page(),
+      home: HomePage(),
     );
   }
 }
