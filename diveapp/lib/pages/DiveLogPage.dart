@@ -8,6 +8,7 @@ class DiveLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       // appBar: AppBar(title: const Text('Empty List Test')),
       body: logSize > 0
           ? Column(

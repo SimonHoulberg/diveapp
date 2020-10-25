@@ -46,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  BottomNavBarItem(setPage: setPage, icon: Icons.face, id: 0),
+                  BottomNavBarItem(setPage: setPage, icon: Icons.home, id: 0),
                   Container(),
                   BottomNavBarItem(setPage: setPage, icon: Icons.list, id: 1),
                   Container(),
@@ -62,12 +62,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                    'Profile',
+                    'Home',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Container(),
                   Text(
-                    'Dive Log',
+                    'Diving log',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Container(),

@@ -3,14 +3,14 @@ import 'package:diveapp/navBar/BottomNavBar.dart';
 import 'package:flutter/material.dart';
 
 import 'DiveLogPage.dart';
-import 'ProfilePage.dart';
+import 'WelcomePage.dart';
 import 'SettingsPage.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> navBarPages = [
-      ProfilePage(),
+      WelcomePage(),
       DiveLogPage(),
       SettingsPage(),
     ];
