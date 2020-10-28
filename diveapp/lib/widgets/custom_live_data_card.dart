@@ -54,7 +54,19 @@ class CustomLiveDataCard extends StatelessWidget {
                         )
                       ]),
                   _buildDivider(),
-                  ElevatedButton(onPressed: null, child: Text('Select User'))
+                  ElevatedButton(
+                      onPressed: null,
+                      style: ButtonStyle(backgroundColor:
+                          MaterialStateProperty.resolveWith(
+                              (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).accentColor;
+                        }
+                        return Theme.of(context).primaryColorLight;
+                      })),
+                      child: Text(
+                        'Select User',
+                      ))
                 ],
               )));
     } else {

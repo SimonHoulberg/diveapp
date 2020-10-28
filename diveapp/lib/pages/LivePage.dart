@@ -34,8 +34,10 @@ class _LivePageState extends State<LivePage> {
   @override
   Widget build(BuildContext context) {
     return Theme(
+        isMaterialAppTheme: true,
         data: ThemeData(brightness: Brightness.light),
         child: Scaffold(
+          backgroundColor: Colors.grey.shade200,
           body: Container(
             padding: const EdgeInsets.all(16.0),
             child: ListView.builder(
@@ -45,8 +47,59 @@ class _LivePageState extends State<LivePage> {
                     return CustomLiveDataCard(mockList[index]);
                   } else {
                     return Container(
-                        //TODO add device button (add user button?)
-                        );
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                              flex: 3,
+                              child: Card(
+                                  elevation: 4.0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(24, 12, 24, 12),
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (Set<MaterialState> states) {
+                                          if (states.contains(
+                                              MaterialState.pressed)) {
+                                            return Theme.of(context)
+                                                .primaryColor;
+                                          }
+                                          return Theme.of(context)
+                                              .primaryColorLight;
+                                        })),
+                                        child: Text("Add Device")),
+                                  ))),
+                          Flexible(
+                              flex: 3,
+                              child: Card(
+                                  elevation: 4.0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(24, 12, 24, 12),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return Theme.of(context).primaryColor;
+                                        }
+                                        return Theme.of(context)
+                                            .primaryColorLight;
+                                      })),
+                                      child: Text("Add User"),
+                                    ),
+                                  ))),
+                        ],
+                      ),
+                      //TODO add device button (add user button?)
+                    );
                   }
                 }),
           ),
