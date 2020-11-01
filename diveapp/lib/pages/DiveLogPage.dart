@@ -1,8 +1,7 @@
 import 'package:diveapp/pages/DiveLogColumn.dart';
-import 'package:diveapp/pages/DiveLogTitle.dart';
 import 'package:flutter/material.dart';
 
-final int logSize = 100;
+final int logSize = 24;
 
 class DiveLogPage extends StatelessWidget {
   @override
@@ -13,18 +12,12 @@ class DiveLogPage extends StatelessWidget {
       body: logSize > 0
           ? Column(
               children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  height: 75,
-                  color: Theme.of(context).primaryColor,
-                  child: DiveLogTitle(),
-                ),
                 Expanded(
                   child: Scrollbar(
                     thickness: 8,
                     radius: Radius.circular(5),
                     child: ListView.separated(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(16),
                       itemCount: logSize,
                       itemBuilder: (BuildContext context, int index) {
                         return DiveLogColumn();
@@ -36,9 +29,7 @@ class DiveLogPage extends StatelessWidget {
                 ),
               ],
             )
-          : Center(child: const Text('No divers found')),
+          : Center(child: const Text('No dive log found')),
     );
   }
 }
-
-class ScrollBar {}
