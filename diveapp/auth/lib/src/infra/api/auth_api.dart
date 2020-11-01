@@ -29,7 +29,11 @@ class AuthApi implements IAuthApi {
     var response = await _client.post(endpoint,
         body: jsonEncode(Mapper.toJson(credential)),
         headers: {"Content-type": "application/json"});
-    if (response.statusCode != 200) return Result.error('Server error');
+
+    if (response.statusCode != 200) {
+      Map map = jsonDecode(response.body);
+      return Result.error(_transformError(map));
+    }
     var json = jsonDecode(response.body);
 
     return json['auth_token'] != null
@@ -47,5 +51,12 @@ class AuthApi implements IAuthApi {
     var response = await _client.post(url, headers: headers);
     if (response.statusCode != 200) return Result.value(false);
     return Result.value(true);
+  }
+
+  _transformError(Map map) {
+    var contents = map['error'] ?? map['errors'];
+    if (contents is String) return contents;
+    var errStr = contents.fold('',(prev, ele) => prev + ele.values.first + '\n');
+    return errStr.trim();
   }
 }

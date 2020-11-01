@@ -111,16 +111,16 @@ class _AuthPageState extends State<AuthPage> {
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-//                CubitProvider.of<AuthCubit>(context).signin(
-//                  widget._manager.email(
-//                    email: _email,
-//                    password: _password,
-//                  ),
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(builder: (context) => HomePage()),
 //                );
+                CubitProvider.of<AuthCubit>(context).signin(
+                  widget._manager.email(
+                    email: _email,
+                    password: _password,
+                  ),
+                );
               },
             ),
             SizedBox(height: 30.0),
