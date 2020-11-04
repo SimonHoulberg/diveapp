@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:async/async.dart';
-import 'package:auth/src/domain/credential.dart';
 import 'package:auth/src/domain/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:auth/src/infra/api/auth_api_contract.dart';
+
+import '../../domain/credential.dart';
+import '../../infra/api/auth_api_contract.dart';
 import 'mapper.dart';
 
 class AuthApi implements IAuthApi {
@@ -43,9 +45,9 @@ class AuthApi implements IAuthApi {
 
   @override
   Future<Result<bool>> signOut(Token token) async {
-    var url = baseUrl + 'auth/signout';
+    var url = baseUrl + '/auth/signout';
     var headers = {
-      "content-type": "application/json",
+      "Content-type": "application/json",
       "Authorization": token.value
     };
     var response = await _client.post(url, headers: headers);
@@ -56,7 +58,8 @@ class AuthApi implements IAuthApi {
   _transformError(Map map) {
     var contents = map['error'] ?? map['errors'];
     if (contents is String) return contents;
-    var errStr = contents.fold('',(prev, ele) => prev + ele.values.first + '\n');
+    var errStr =
+    contents.fold('', (prev, ele) => prev + ele.values.first + '\n');
     return errStr.trim();
   }
 }

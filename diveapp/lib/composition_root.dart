@@ -18,7 +18,7 @@ class CompositionRoot {
   static configure() {
     _localStore = LocalStore(_sharedPreferences);
     _client = Client();
-    _baseUrl = "http://localhost:3000";
+    _baseUrl = "http://10.0.2.2:3000";
   }
 
   static Widget composeAuthUi() {
