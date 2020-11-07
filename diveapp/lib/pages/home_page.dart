@@ -1,11 +1,10 @@
 import 'package:diveapp/main.dart';
-import 'package:diveapp/navBar/BottomNavBar.dart';
+import 'package:diveapp/navBar/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'LivePage.dart';
-import 'DiveLogPage.dart';
-import 'WelcomePage.dart';
-import 'SettingsPage.dart';
+import 'live_page.dart';
+import 'dive_log_page.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatelessWidget {
   @override

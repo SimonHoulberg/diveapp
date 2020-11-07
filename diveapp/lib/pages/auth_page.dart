@@ -1,5 +1,4 @@
 import 'package:auth/auth.dart';
-import 'package:diveapp/pages/HomePage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';

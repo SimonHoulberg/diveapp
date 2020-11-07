@@ -1,4 +1,4 @@
-import 'package:diveapp/pages/DiveLogColumn.dart';
+import 'package:diveapp/pages/dive_log_column.dart';
 import 'package:flutter/material.dart';
 
 final int logSize = 24;

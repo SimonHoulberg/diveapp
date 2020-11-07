@@ -71,6 +71,9 @@ class _LivePageState extends State<LivePage> {
                                           return Theme.of(context)
                                               .primaryColorLight;
                                         })),
+                                        onPressed: () {
+                                          // TODO
+                                        },
                                         child: Text("Add Device")),
                                   ))),
                           Flexible(
@@ -93,6 +96,9 @@ class _LivePageState extends State<LivePage> {
                                         return Theme.of(context)
                                             .primaryColorLight;
                                       })),
+                                      onPressed: () {
+                                        // TODO
+                                      },
                                       child: Text("Add User"),
                                     ),
                                   ))),

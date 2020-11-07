@@ -1,8 +1,8 @@
 import 'package:diveapp/main.dart';
 import 'package:flutter/material.dart';
 
-import 'BottomNavBarItem.dart';
-import 'WaveClipper.dart';
+import 'bottom_nav_bar_item.dart';
+import 'wave_clipper.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override
