@@ -11,7 +11,6 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this.localStore) : super(InitialState());
 
   signin(IAuthService authService) async {
-    _startLoading();
     final result = await authService.signIn();
     _setResultOfAuthState(result);
   }
@@ -29,13 +28,13 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   signup(ISignUpService signUpService, User user) async {
-    _startLoading();
     final result = await signUpService.signUp(
       user.name,
       user.email,
       user.password,
     );
     _setResultOfAuthState(result);
+
   }
 
   void _setResultOfAuthState(Result<Token> result) {

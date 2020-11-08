@@ -1,4 +1,5 @@
 import 'package:auth/auth.dart';
+import 'package:diveapp/pages/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:diveapp/states_management/auth/auth_state.dart';
 import 'package:diveapp/widgets/custom_flat_button.dart';
 import 'package:diveapp/widgets/custom_outline_button.dart';
 import 'package:diveapp/widgets/custom_text_field.dart';
+
 
 class AuthPage extends StatefulWidget {
   final AuthManager _manager;
@@ -109,17 +111,17 @@ class _AuthPageState extends State<AuthPage> {
             CustomFlatButton(
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
-              onPressed: () {
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(builder: (context) => HomePage()),
-//                );
-                CubitProvider.of<AuthCubit>(context).signin(
+              onPressed: ()  {
+                Future<dynamic> _result =  CubitProvider.of<AuthCubit>(context).signin(
                   widget._manager.email(
                     email: _email,
                     password: _password,
                   ),
                 );
+                _result.whenComplete(() => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                ));
               },
             ),
             SizedBox(height: 30.0),
@@ -133,8 +135,13 @@ class _AuthPageState extends State<AuthPage> {
                 fit: BoxFit.fill,
               ),
               onPressed: () {
-                CubitProvider.of<AuthCubit>(context)
+                Future<dynamic> _result = CubitProvider.of<AuthCubit>(context)
                     .signin(widget._manager.google);
+                _result.whenComplete(() => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                ));
+
               },
             ),
             SizedBox(height: 30),
@@ -192,8 +199,15 @@ class _AuthPageState extends State<AuthPage> {
                   email: _email,
                   password: _password,
                 );
-                CubitProvider.of<AuthCubit>(context)
+
+                Future<dynamic> _result = CubitProvider.of<AuthCubit>(context)
                     .signup(widget._signUpService, user);
+
+                _result.whenComplete(() => _controller.previousPage(
+                duration: Duration(milliseconds: 1000),
+                curve: Curves.elasticOut)
+
+                );
               },
             ),
             SizedBox(height: 30.0),
