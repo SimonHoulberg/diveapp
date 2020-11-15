@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -18,7 +20,13 @@ class CompositionRoot {
   static configure() {
     _localStore = LocalStore(_sharedPreferences);
     _client = Client();
-    _baseUrl = "http://10.0.2.2:3000";
+    if (Platform.isAndroid) {
+      // android backend ip
+      _baseUrl = "http://10.0.2.2:3000";
+    } else {
+      // web backend ip
+      _baseUrl = "http://localhost:3000";
+    }
   }
 
   static Widget composeAuthUi() {
