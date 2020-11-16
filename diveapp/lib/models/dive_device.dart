@@ -9,30 +9,30 @@ class DiveDevice {
   User connectedUser;
 
   //Parameters
-  String coordinates, status;
-  int depth, bottomDive, time;
+  String coordinates, status, time;
+  int depth, bottomDive;
 
   DiveDevice(@required this.deviceID, this.name, this.connectedUser);
 
   dynamic getParameter(String param) {
     switch (param) {
       case 'Depth':
-        this.depth;
+        return this.depth.toString().padLeft(2, "0");
         break;
       case 'Bottom':
-        this.bottomDive;
+        return this.bottomDive;
         break;
       case 'Coordinates':
-        this.coordinates;
+        return this.coordinates;
         break;
       case 'Time':
-        this.time;
+        return this.time;
         break;
       case 'Status':
-        this.status;
+        return this.status;
         break;
       default:
-        'Invalid parameter';
+        return 'Invalid parameter requested from dive device';
         break;
     }
   }

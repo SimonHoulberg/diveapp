@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class User {
+  String userID;
   String name;
   String email;
   String password;

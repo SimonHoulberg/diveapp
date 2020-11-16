@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:diveapp/models/dive_device.dart';
 import 'package:flutter/material.dart';
 
@@ -22,29 +20,6 @@ class _CustomLiveDataCardState extends State<CustomLiveDataCard> {
     'Time',
     'Status',
   ];
-
-//TESTING TIMER
-  //Creating a random number generator
-  Random _random = new Random();
-  //Recursive method to update state every 1 second
-  void _timer() {
-    Future.delayed(Duration(seconds: 1)).then((_) {
-      this.setState(() {
-        if (this.widget._device.depth == null) {
-          this.widget._device.depth = 0;
-        }
-        this.widget._device.depth = // set the depth of the linked device
-            this.widget._device.depth +
-                _random
-                    .nextInt(2); // to be increased by a random number (max 2)
-
-        print("Updating depth for device:" + this.widget._device.name);
-        print("New depth:" + this.widget._device.depth.toString());
-      });
-      _timer(); // call itself to make it recursive
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     if (this.widget._device.connectedUser == null) {
@@ -100,7 +75,6 @@ class _CustomLiveDataCardState extends State<CustomLiveDataCard> {
               )));
     } else {
       // return card with dive parameters
-      _timer();
       return new Container(
           child: Card(
               margin: EdgeInsets.all(4),
