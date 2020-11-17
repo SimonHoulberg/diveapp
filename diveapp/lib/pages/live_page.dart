@@ -101,9 +101,8 @@ class _LivePageState extends State<LivePage> {
   DiveSession session = new DiveSession(
       "sessionID", "name", "location", DateTime.now().toString(), []);
 
-  //Save dive data every seconds
-
-  saveData() {
+  //funtion to initialize the devices with connected user to the attendees list for the session, should be run in initState()
+  initializeSessionAttendees() {
     for (var entry in mockList) {
       if (entry.connectedUser != null) {
         session.attending.add(new Attendee(entry.connectedUser.userID,
@@ -114,9 +113,9 @@ class _LivePageState extends State<LivePage> {
 
   @override
   void initState() {
-    swatch.start();
-    _timer();
-    Timer saver = Timer.periodic(Duration(seconds: 5), saveData());
+    swatch.start(); // start stopwatch to get time
+    initializeSessionAttendees(); // initialize devices with connected users to the attendee list
+    _timer(); // run the recusive function once to start it
     super.initState();
   }
 
