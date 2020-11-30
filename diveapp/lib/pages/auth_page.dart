@@ -1,23 +1,26 @@
-import 'package:auth/auth.dart';
 import 'package:diveapp/pages/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
-import 'package:diveapp/models/user.dart';
 import 'package:diveapp/states_management/auth/auth_cubit.dart';
 import 'package:diveapp/states_management/auth/auth_state.dart';
 import 'package:diveapp/widgets/custom_flat_button.dart';
 import 'package:diveapp/widgets/custom_outline_button.dart';
 import 'package:diveapp/widgets/custom_text_field.dart';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthPage extends StatefulWidget {
-  final AuthManager _manager;
-  final ISignUpService _signUpService;
 
-  AuthPage(this._manager, this._signUpService);
+
+  AuthPage();
   @override
   _AuthPageState createState() => _AuthPageState();
+
+
 }
 
 class _AuthPageState extends State<AuthPage> {
@@ -29,6 +32,18 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    checkToken() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString("token");
+      if (token != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      }
+    }
+
+    checkToken();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -47,6 +62,7 @@ class _AuthPageState extends State<AuthPage> {
                 _showLoader();
               }
               if (state is ErrorState) {
+                // ignore: deprecated_member_use
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -111,17 +127,19 @@ class _AuthPageState extends State<AuthPage> {
             CustomFlatButton(
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
-              onPressed: ()  {
-                Future<dynamic> _result =  CubitProvider.of<AuthCubit>(context).signin(
-                  widget._manager.email(
-                    email: _email,
-                    password: _password,
-                  ),
-                );
-                _result.whenComplete(() => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                ));
+              onPressed: ()  async {
+                login(_email, _password);
+                SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                String token = prefs.getString("token");
+                print(token);
+                if (token != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                }
+
               },
             ),
             SizedBox(height: 30.0),
@@ -135,13 +153,6 @@ class _AuthPageState extends State<AuthPage> {
                 fit: BoxFit.fill,
               ),
               onPressed: () {
-                Future<dynamic> _result = CubitProvider.of<AuthCubit>(context)
-                    .signin(widget._manager.google);
-                _result.whenComplete(() => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                ));
-
               },
             ),
             SizedBox(height: 30),
@@ -193,23 +204,18 @@ class _AuthPageState extends State<AuthPage> {
             CustomFlatButton(
               text: 'Sign up',
               size: Size(double.infinity, 54.0),
-              onPressed: () {
-                final user = User(
-                  name: _username,
-                  email: _email,
-                  password: _password,
-                );
-
-                Future<dynamic> _result = CubitProvider.of<AuthCubit>(context)
-                    .signup(widget._signUpService, user);
-
-                _result.whenComplete(() => _controller.previousPage(
-                duration: Duration(milliseconds: 1000),
-                curve: Curves.elasticOut)
-
-                );
-              },
-            ),
+              onPressed: () async {
+                signup(_email, _password, _username);
+                SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+                String token = prefs.getString("token");
+                if (token != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                };
+              }),
             SizedBox(height: 30.0),
             SizedBox(height: 30),
             RichText(
@@ -280,4 +286,49 @@ class _AuthPageState extends State<AuthPage> {
   _hideLoader() {
     Navigator.of(context, rootNavigator: true).pop();
   }
+
+  signup(email, password, name) async {
+    var url = "http://localhost:5000/signup"; // iOS
+    final http.Response response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+        'name': name,
+      }),
+    );
+
+    print(response.body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var parse = jsonDecode(response.body);
+
+    await prefs.setString('token', parse["token"]);
+    // if (response.statusCode == 201) {
+    // } else {
+    //   throw Exception('Failed to create album.');
+    // }
+  }
+
+  login(email, password) async {
+    var url = "http://localhost:5000/login"; // iOS
+    final http.Response response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
+    print(response.body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var parse = jsonDecode(response.body);
+
+    await prefs.setString('token', parse["token"]);
+  }
+
 }

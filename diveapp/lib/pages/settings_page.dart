@@ -1,3 +1,4 @@
+import 'package:diveapp/composition_root.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -85,7 +86,10 @@ class SettingsPage extends StatelessWidget {
                           title: Text("Log out"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () {
-                            //TODO
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CompositionRoot.composeAuthUi()),
+                            );
                           },
                         ),
                       ],
