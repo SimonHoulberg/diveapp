@@ -1,3 +1,4 @@
+import 'package:diveapp/composition_root.dart';
 import 'package:diveapp/pages/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -127,19 +128,10 @@ class _AuthPageState extends State<AuthPage> {
             CustomFlatButton(
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
-              onPressed: ()  async {
+              onPressed: ()   {
                 validateUser(_email, _password);
-                login(_email, _password);
-                SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                String token = prefs.getString("token");
-                print("TOKEN: " + token);
-                if (token != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                }
+                 login(_email, _password);
+                 checkToken();
 
               },
             ),
@@ -215,7 +207,12 @@ class _AuthPageState extends State<AuthPage> {
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
                   );
-                };
+
+                } else
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CompositionRoot.composeAuthUi()),
+                  );
               }),
             SizedBox(height: 30.0),
             SizedBox(height: 30),
@@ -344,6 +341,17 @@ class _AuthPageState extends State<AuthPage> {
 
     await prefs.setString('token', parse["token"]);
   }
+
+checkToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString("token");
+  if (token != null) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+}
 
 
 
