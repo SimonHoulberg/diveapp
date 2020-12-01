@@ -128,11 +128,12 @@ class _AuthPageState extends State<AuthPage> {
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
               onPressed: ()  async {
+                validateUser(_email, _password);
                 login(_email, _password);
                 SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 String token = prefs.getString("token");
-                print(token);
+                print("TOKEN: " + token);
                 if (token != null) {
                   Navigator.push(
                     context,
@@ -256,6 +257,7 @@ class _AuthPageState extends State<AuthPage> {
           onChanged: (val) {
             _email = val;
           },
+
         ),
         SizedBox(height: 30.0),
         CustomTextField(
@@ -312,6 +314,18 @@ class _AuthPageState extends State<AuthPage> {
     // }
   }
 
+  validateUser(username, password) {
+    if(username.length == 0)
+      print("Username field is empty");
+    else if(username.length < 4)
+      print("Invalid Username: " + "The username should be at least 4 characters long");
+    if(password.length == 0)
+      print("Password field is empty");
+    else if(password.length < 4)
+      print("Invalid Password: " + "The password should be at least 4 characters long");
+
+  }
+
   login(email, password) async {
     var url = "http://localhost:5000/login"; // iOS
     final http.Response response = await http.post(
@@ -330,5 +344,7 @@ class _AuthPageState extends State<AuthPage> {
 
     await prefs.setString('token', parse["token"]);
   }
+
+
 
 }
