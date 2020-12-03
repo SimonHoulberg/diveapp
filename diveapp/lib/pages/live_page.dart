@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:diveapp/models/attendee.dart';
@@ -21,6 +22,9 @@ class _LivePageState extends State<LivePage> {
 //TESTING TIMER
   //Creating a random number generator
   Random _random = new Random();
+
+  bool runBuild = false;
+  Icon _fabIcon = Icon(Icons.play_arrow);
   //Recursive method to update state every 1 second
   void _timer() {
     Future.delayed(Duration(seconds: 1)).then((_) {
@@ -46,7 +50,6 @@ class _LivePageState extends State<LivePage> {
       List<String> coord = ['N', 'S', 'W', 'E'];
       // set random from list
       mockList[index].coordinates = coord[_random.nextInt(4)];
-      setState(() {});
 
       // save data to session list
 
@@ -62,8 +65,11 @@ class _LivePageState extends State<LivePage> {
             attendingUserDevice.time,
             attendingUserDevice.status));
       }
-
-      _timer(); // call itself to make it recursive
+      // if the runBuild bool is true, continue running and update state
+      if (runBuild) {
+        setState(() {});
+        _timer(); // call itself to make it recursive
+      }
     });
   }
 
@@ -115,8 +121,13 @@ class _LivePageState extends State<LivePage> {
   void initState() {
     swatch.start(); // start stopwatch to get time
     initializeSessionAttendees(); // initialize devices with connected users to the attendee list
-    _timer(); // run the recusive function once to start it
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    runBuild = false; // to stop setState from running after closing page
+    super.dispose();
   }
 
   @override
@@ -125,6 +136,22 @@ class _LivePageState extends State<LivePage> {
         isMaterialAppTheme: true,
         data: ThemeData(brightness: Brightness.light),
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              if (runBuild) {
+                runBuild = false;
+                _fabIcon = Icon(Icons.play_arrow);
+                setState(() {});
+              } else {
+                runBuild = true;
+                _timer(); // run the recusive function once to start it
+                _fabIcon = Icon(Icons.pause);
+                setState(() {});
+              }
+            },
+            child: _fabIcon,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           backgroundColor: Colors.grey.shade200,
           body: Container(
             padding: const EdgeInsets.all(16.0),
