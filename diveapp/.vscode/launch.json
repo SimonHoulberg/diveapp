@@ -7,8 +7,7 @@
         {
             "name": "diveapp",
             "request": "launch",
-            "type": "dart",
-            "args": ["--web-port", "8000"], // required for backend cors
+            "type": "dart"
         },
         {
             "name": "auth",
