@@ -10,18 +10,14 @@ import 'package:diveapp/widgets/custom_outline_button.dart';
 import 'package:diveapp/widgets/custom_text_field.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class AuthPage extends StatefulWidget {
-
-
   AuthPage();
   @override
   _AuthPageState createState() => _AuthPageState();
-
-
 }
 
 class _AuthPageState extends State<AuthPage> {
@@ -33,18 +29,6 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    checkToken() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString("token");
-      if (token != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      }
-    }
-
-    checkToken();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -56,28 +40,7 @@ class _AuthPageState extends State<AuthPage> {
               child: _buildLogo(),
             ),
             SizedBox(height: 50.0),
-            CubitConsumer<AuthCubit, AuthState>(builder: (_, state) {
-              return _buildUI();
-            }, listener: (context, state) {
-              if (state is LoadingState) {
-                _showLoader();
-              }
-              if (state is ErrorState) {
-                // ignore: deprecated_member_use
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      state.message,
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          .copyWith(color: Colors.white, fontSize: 16.0),
-                    ),
-                  ),
-                );
-                _hideLoader();
-              }
-            })
+            _buildUI(),
           ],
         ),
       ),
@@ -128,11 +91,11 @@ class _AuthPageState extends State<AuthPage> {
             CustomFlatButton(
               text: 'Sign in',
               size: Size(double.infinity, 54.0),
-              onPressed: ()   {
-                validateUser(_email, _password);
-                 login(_email, _password);
-                 checkToken();
-
+              onPressed: () {
+                _showLoader();
+                if (validateUser(_email, _password)) {
+                  login(_email, _password);
+                }
               },
             ),
             SizedBox(height: 30.0),
@@ -145,8 +108,7 @@ class _AuthPageState extends State<AuthPage> {
                 width: 18.0,
                 fit: BoxFit.fill,
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
             SizedBox(height: 30),
             RichText(
@@ -195,25 +157,12 @@ class _AuthPageState extends State<AuthPage> {
             ..._emailAndPassword(),
             SizedBox(height: 30.0),
             CustomFlatButton(
-              text: 'Sign up',
-              size: Size(double.infinity, 54.0),
-              onPressed: () async {
-                signup(_email, _password, _username);
-                SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-                String token = prefs.getString("token");
-                if (token != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-
-                } else
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CompositionRoot.composeAuthUi()),
-                  );
-              }),
+                text: 'Sign up',
+                size: Size(double.infinity, 54.0),
+                onPressed: () async {
+                  _showLoader();
+                  signup(_email, _password, _username);
+                }),
             SizedBox(height: 30.0),
             SizedBox(height: 30),
             RichText(
@@ -254,7 +203,6 @@ class _AuthPageState extends State<AuthPage> {
           onChanged: (val) {
             _email = val;
           },
-
         ),
         SizedBox(height: 30.0),
         CustomTextField(
@@ -301,26 +249,51 @@ class _AuthPageState extends State<AuthPage> {
     );
 
     print(response.body);
+
+    _showToast(response.body);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
 
     await prefs.setString('token', parse["token"]);
-    // if (response.statusCode == 201) {
-    // } else {
-    //   throw Exception('Failed to create album.');
-    // }
   }
 
-  validateUser(username, password) {
-    if(username.length == 0)
+  bool validateUser(username, password) {
+    if (username.length == 0) {
       print("Username field is empty");
-    else if(username.length < 4)
-      print("Invalid Username: " + "The username should be at least 4 characters long");
-    if(password.length == 0)
-      print("Password field is empty");
-    else if(password.length < 4)
-      print("Invalid Password: " + "The password should be at least 4 characters long");
+      _showToast(jsonEncode(<String, String>{
+        'msg': "Username field is empty!",
+      }));
+      return false;
+    } else if (username.length < 4) {
+      print("Invalid Username: " +
+          username +
+          " The username should be at least 4 characters long");
+      _showToast(jsonEncode(<String, String>{
+        'msg': "Invalid Username: " +
+            username +
+            " The username should be at least 4 characters long",
+      }));
+      return false;
+    }
 
+    if (password.length == 0) {
+      print("Password field is empty");
+      _showToast(jsonEncode(<String, String>{
+        'msg': "Password field is empty",
+      }));
+      return false;
+    } else if (password.length < 4) {
+      print("Invalid Password! " +
+          "The password should be at least 4 characters long");
+      _showToast(jsonEncode(<String, String>{
+        'msg': "Invalid Password! " +
+            "The password should be at least 4 characters long",
+      }));
+      return false;
+    }
+
+    return true;
   }
 
   login(email, password) async {
@@ -336,23 +309,53 @@ class _AuthPageState extends State<AuthPage> {
       }),
     );
     print(response.body);
+
+    _showToast(response.body);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
 
     await prefs.setString('token', parse["token"]);
+
+    String token = prefs.getString("token");
+    if (token != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CompositionRoot.composeAuthUi()),
+      );
   }
 
-checkToken() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String token = prefs.getString("token");
-  if (token != null) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+  _showToast(response) {
+    Map<String, dynamic> json = jsonDecode(response) as Map<String, dynamic>;
+    String msg = json['msg'];
+
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition: "center");
+
+    _hideLoader();
   }
-}
 
-
-
+  checkToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+    if (token != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
+  }
 }

@@ -29,6 +29,8 @@ dependencies:
   auth:
     path: ./auth
 
+  fluttertoast: ^7.1.5
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -57,6 +59,7 @@ flutter:
   # this loads all assets from assets/ folder (pictures, etc)
   assets:
     - assets/
+    
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
