@@ -126,6 +126,7 @@ class _LivePageState extends State<LivePage> {
 
   @override
   void dispose() {
+    print(jsonEncode(session));
     runBuild = false; // to stop setState from running after closing page
     super.dispose();
   }
