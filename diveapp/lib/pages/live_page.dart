@@ -10,6 +10,9 @@ import 'package:diveapp/models/user.dart';
 import 'package:diveapp/widgets/custom_live_data_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:mock_data/mock_data.dart';
 
 class LivePage extends StatefulWidget {
   LivePage({Key key}) : super(key: key);
@@ -76,17 +79,17 @@ class _LivePageState extends State<LivePage> {
   //Mock data list
   List<DiveDevice> mockList = [
     new DiveDevice(
-        '1', 'device1', new User(name: 'Anders', email: 'a', password: 'a')),
+        '1', 'device1', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice(
-        '2', 'device2', new User(name: 'Paulius', email: 'a', password: 'a')),
+        '2', 'device2', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice(
-        '3', 'device3', new User(name: 'Simon', email: 'a', password: 'a')),
+        '3', 'device3', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice(
-        '4', 'device4', new User(name: 'Putin', email: 'a', password: 'a')),
+        '4', 'device4', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice(
-        '4', 'device4', new User(name: 'Putin', email: 'a', password: 'a')),
+        '4', 'device4', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice(
-        '4', 'device4', new User(name: 'Putin', email: 'a', password: 'a')),
+        '4', 'device4', new User(name: mockName(), email: 'a', password: 'a')),
     new DiveDevice('5', 'unfds', null),
     new DiveDevice('5', 'unlinkedDevice', null),
     new DiveDevice('5', 'unlinkedDevice', null),
@@ -104,8 +107,8 @@ class _LivePageState extends State<LivePage> {
   }
 
   //Initialize structure to save (current date and empty attendee list)
-  DiveSession session = new DiveSession(
-      "sessionID", "name", "location", DateTime.now().toString(), []);
+  DiveSession session = new DiveSession("sessionID " + mockInteger().toString(),
+      "name", mockString(16), DateTime.now().toString(), []);
 
   //funtion to initialize the devices with connected user to the attendees list for the session, should be run in initState()
   initializeSessionAttendees() {
@@ -126,9 +129,39 @@ class _LivePageState extends State<LivePage> {
 
   @override
   void dispose() {
-    print(jsonEncode(session));
+    //_sendDiveToDatabase(jsonEncode(session));
     runBuild = false; // to stop setState from running after closing page
     super.dispose();
+  }
+
+  _sendDiveToDatabase(json) async {
+    //print(json);
+
+    var url = "http://localhost:5000/add-dive"; // iOS
+    final http.Response response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json,
+    );
+
+    _showToast(response.body);
+  }
+
+  _showToast(response) {
+    Map<String, dynamic> json = jsonDecode(response) as Map<String, dynamic>;
+    String msg = json['msg'];
+
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition: "center");
   }
 
   @override
@@ -142,6 +175,11 @@ class _LivePageState extends State<LivePage> {
               if (runBuild) {
                 runBuild = false;
                 _fabIcon = Icon(Icons.play_arrow);
+
+                var diveLog =
+                    jsonEncode(<String, DiveSession>{"dive": session});
+                _sendDiveToDatabase(diveLog);
+
                 setState(() {});
               } else {
                 runBuild = true;
