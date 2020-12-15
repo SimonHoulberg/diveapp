@@ -255,6 +255,18 @@ class _AuthPageState extends State<AuthPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
 
+    if (parse["token"] != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CompositionRoot.composeAuthUi()),
+      );
+
     await prefs.setString('token', parse["token"]);
   }
 
