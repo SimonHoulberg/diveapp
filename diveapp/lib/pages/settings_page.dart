@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
             return CircularProgressIndicator();
           }
           // if loaded return view
-          if (snapshot.hasData) {
+          if (true) {
             var receivedData = jsonDecode(snapshot.data);
             var decoded = receivedData["decoded"];
             userName = decoded["name"];
