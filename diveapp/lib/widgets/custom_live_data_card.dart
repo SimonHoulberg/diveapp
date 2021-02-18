@@ -24,109 +24,69 @@ class _CustomLiveDataCardState extends State<CustomLiveDataCard> {
   Widget build(BuildContext context) {
     if (this.widget._device.connectedUser == null) {
       //return card without dive parameters
-      return new Container(
-          child: Card(
-              margin: EdgeInsets.all(4),
-              elevation: 4.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(this.widget._device.name,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.indigo,
-                            )),
-                        Text(' : ',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.indigo,
-                            )),
-                        Text(
-                          "No user",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        )
-                      ]),
-                  _buildDivider(),
-                  ElevatedButton(
-                      onPressed: null,
-                      style: ButtonStyle(backgroundColor:
-                          MaterialStateProperty.resolveWith(
-                              (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Theme.of(context).accentColor;
-                        }
-                        return Theme.of(context).primaryColorLight;
-                      })),
-                      child: Text(
-                        'Select User',
-                      ))
-                ],
-              )));
+      return new Container(child: Card());
     } else {
       // return card with dive parameters
-      return new Container(
+      return new SizedBox(
+          height: 64,
           child: Card(
-              margin: EdgeInsets.all(4),
+              margin: EdgeInsets.all(6),
               elevation: 4.0,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
-              child: Column(
+              child: Stack(
                 children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                          this.widget._device.name +
-                              ' : ' +
-                              this.widget._device.connectedUser.name,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.indigo,
-                          ))),
-                  _buildDivider(),
-                  Wrap(
-                    children: [
-                      for (var param in parameters)
-                        Card(
-                            margin: EdgeInsets.all(2),
-                            elevation: 2.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0)),
-                            child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(param +
-                                    ': ' +
-                                    this
-                                        .widget
-                                        ._device
-                                        .getParameter(param)
-                                        .toString())))
-                    ],
-                  )
+                  Align(
+                    alignment: Alignment(-0.9, 0.0),
+                    child: Text(this.widget._device.connectedUser.name,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo,
+                        )),
+                  ),
+                  Align(
+                    alignment: Alignment(-0.3, 0.0),
+                    child: Text(this
+                        .widget
+                        ._device
+                        .getParameter(parameters[0])
+                        .toString()),
+                  ),
+                  Align(
+                    alignment: Alignment(0.0, 0.0),
+                    child: Text(this
+                        .widget
+                        ._device
+                        .getParameter(parameters[1])
+                        .toString()),
+                  ),
+                  Align(
+                    alignment: Alignment(0.3, 0.0),
+                    child: Text(this
+                        .widget
+                        ._device
+                        .getParameter(parameters[2])
+                        .toString()),
+                  ),
+                  Align(
+                    alignment: Alignment(0.6, 0.0),
+                    child: Text(this
+                        .widget
+                        ._device
+                        .getParameter(parameters[3])
+                        .toString()),
+                  ),
+                  Align(
+                    alignment: Alignment(0.9, 0.0),
+                    child: Text(this
+                        .widget
+                        ._device
+                        .getParameter(parameters[4])
+                        .toString()),
+                  ),
                 ],
               )));
     }
-  }
-
-  Container _buildDivider() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      width: double.infinity,
-      height: 1.0,
-      color: Colors.grey.shade400,
-    );
   }
 }
