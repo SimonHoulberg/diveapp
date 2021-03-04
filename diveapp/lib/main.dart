@@ -1,4 +1,5 @@
 import 'package:diveapp/composition_root.dart';
+import 'package:diveapp/pages/dive_log_info_page.dart';
 import 'package:diveapp/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

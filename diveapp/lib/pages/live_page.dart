@@ -169,100 +169,236 @@ class _LivePageState extends State<LivePage> {
     return Theme(
         isMaterialAppTheme: true,
         data: ThemeData(brightness: Brightness.light),
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              if (runBuild) {
-                runBuild = false;
-                _fabIcon = Icon(Icons.play_arrow);
+        child: Column(
+          children: [
+            Container(
+                margin: EdgeInsets.all(4),
+                child: Stack(
+                  children: [
+                    Align(
+                        alignment: Alignment(-0.95, 0.0),
+                        child: Card(
+                            child: Container(
+                          height: 24,
+                          width: 160,
+                          child: Center(
+                              child: Text("Dive ID number",
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 16))),
+                        ))),
+                    Align(
+                      alignment: Alignment(-0.5, 0.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (runBuild) {
+                            runBuild = false;
+                            _fabIcon = Icon(Icons.play_arrow);
 
-                var diveLog =
-                    jsonEncode(<String, DiveSession>{"dive": session});
-                _sendDiveToDatabase(diveLog);
+                            var diveLog = jsonEncode(
+                                <String, DiveSession>{"dive": session});
+                            _sendDiveToDatabase(diveLog);
 
-                setState(() {});
-              } else {
-                runBuild = true;
-                _timer(); // run the recusive function once to start it
-                _fabIcon = Icon(Icons.pause);
-                setState(() {});
-              }
-            },
-            child: _fabIcon,
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-          backgroundColor: Colors.grey.shade200,
-          body: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-                itemCount: mockList.length + 1,
-                itemBuilder: (context, index) {
-                  if (mockList.length != index) {
-                    return CustomLiveDataCard(mockList[index]);
-                  } else {
-                    return Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Flexible(
-                              flex: 3,
-                              child: Card(
-                                  elevation: 4.0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(24, 12, 24, 12),
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (Set<MaterialState> states) {
-                                          if (states.contains(
-                                              MaterialState.pressed)) {
-                                            return Theme.of(context)
-                                                .primaryColor;
-                                          }
-                                          return Theme.of(context)
-                                              .primaryColorLight;
-                                        })),
-                                        onPressed: () {
-                                          // TODO
-                                        },
-                                        child: Text("Add Device")),
-                                  ))),
-                          Flexible(
-                              flex: 3,
-                              child: Card(
-                                  elevation: 4.0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(24, 12, 24, 12),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(backgroundColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.pressed)) {
-                                          return Theme.of(context).primaryColor;
-                                        }
-                                        return Theme.of(context)
-                                            .primaryColorLight;
-                                      })),
-                                      onPressed: () {
-                                        // TODO
-                                      },
-                                      child: Text("Add User"),
-                                    ),
-                                  ))),
-                        ],
+                            setState(() {});
+                          } else {
+                            runBuild = true;
+                            _timer(); // run the recusive function once to start it
+                            _fabIcon = Icon(Icons.pause);
+                            setState(() {});
+                          }
+                        },
+                        child: _fabIcon,
                       ),
-                      //TODO add device button (add user button?)
-                    );
-                  }
-                }),
-          ),
+                    ),
+
+                    // issues tracker
+                    Align(
+                        alignment: Alignment(0.35, 0.0),
+                        child: Card(
+                            color: Colors.orange,
+                            child: Container(
+                              height: 24,
+                              width: 72,
+                              child: Center(
+                                  child: Text("Issues: " + "X",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ))),
+                            ))),
+                    // diver count
+                    Align(
+                        alignment: Alignment(0.95, 0.0),
+                        child: Card(
+                            color: Colors.cyan,
+                            child: Container(
+                              height: 24,
+                              width: 240,
+                              child: Center(
+                                  child: Text(
+                                      "Number of divers in the water: " + "X",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ))),
+                            ))),
+                  ],
+                )),
+            Column(
+              children: [
+                SizedBox(
+                    //Title bar for divers and parameters
+                    height: 48,
+                    child: Card(
+                        margin: EdgeInsets.all(6),
+                        elevation: 4.0,
+                        color: Colors.indigo,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment(-0.9, 0.0),
+                              child: Text("Name",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Align(
+                              alignment: Alignment(-0.3, 0.0),
+                              child: Text("Depth",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Align(
+                              alignment: Alignment(0.0, 0.0),
+                              child: Text("NDL-time",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Align(
+                              alignment: Alignment(0.3, 0.0),
+                              child: Text("Directions",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Align(
+                              alignment: Alignment(0.6, 0.0),
+                              child: Text("Dive time",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Align(
+                              alignment: Alignment(0.9, 0.0),
+                              child: Text("Status",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                          ],
+                        ))),
+                // List of divers and parameters
+                SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          // Builds the list of devices with users assigned. Uses the custom_live_data_card widget to bu
+                          itemCount: mockList.length + 1,
+                          itemBuilder: (context, index) {
+                            if (mockList.length != index) {
+                              return CustomLiveDataCard(mockList[index]);
+                            } else {
+                              return Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Flexible(
+                                        flex: 3,
+                                        child: Card(
+                                            elevation: 4.0,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0)),
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  24, 12, 24, 12),
+                                              child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .resolveWith((Set<
+                                                                      MaterialState>
+                                                                  states) {
+                                                    if (states.contains(
+                                                        MaterialState
+                                                            .pressed)) {
+                                                      return Theme.of(context)
+                                                          .primaryColor;
+                                                    }
+                                                    return Theme.of(context)
+                                                        .primaryColorLight;
+                                                  })),
+                                                  onPressed: () {
+                                                    // TODO
+                                                  },
+                                                  child: Text("Add Device")),
+                                            ))),
+                                    Flexible(
+                                        flex: 3,
+                                        child: Card(
+                                            elevation: 4.0,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0)),
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  24, 12, 24, 12),
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .resolveWith((Set<
+                                                                    MaterialState>
+                                                                states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed)) {
+                                                    return Theme.of(context)
+                                                        .primaryColor;
+                                                  }
+                                                  return Theme.of(context)
+                                                      .primaryColorLight;
+                                                })),
+                                                onPressed: () {
+                                                  // TODO
+                                                },
+                                                child: Text("Add User"),
+                                              ),
+                                            ))),
+                                  ],
+                                ),
+                                //TODO add device button (add user button?)
+                              );
+                            }
+                          })
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
         ));
   }
 }
