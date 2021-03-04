@@ -15,19 +15,43 @@ class BottomNavBarItem extends StatelessWidget {
         currentIndex = id;
         setPage();
       },
-      child: CircleAvatar(
-        radius: 30,
-        backgroundColor: Theme.of(context).primaryColor,
-        child: CircleAvatar(
-          radius: 25,
-          backgroundColor: currentIndex == id
-              ? Colors.white.withOpacity(0.9)
-              : Colors.transparent,
-          child: Icon(
-            icon,
-            color: currentIndex == id
-                ? Colors.black
-                : Colors.white.withOpacity(0.9),
+      child: SizedBox(
+        height: 110,
+        width: MediaQuery.of(context).size.width / 3,
+        child: Material(
+          color: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                bottom: 0,
+                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.height,
+                child: Material(
+                  color: currentIndex == id
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).backgroundColor,
+                ),
+              ),
+              Center(
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 32.0,
+                ),
+              ),
+              Positioned(
+                bottom: 105, //5px black bar on selected
+                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.height,
+                child: SizedBox(
+                  child: Material(
+                    color: currentIndex == id
+                        ? Colors.black
+                        : Theme.of(context).backgroundColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
