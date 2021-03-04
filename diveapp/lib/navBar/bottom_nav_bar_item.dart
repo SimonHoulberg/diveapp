@@ -16,7 +16,7 @@ class BottomNavBarItem extends StatelessWidget {
         setPage();
       },
       child: SizedBox(
-        height: 110,
+        height: 64,
         width: MediaQuery.of(context).size.width / 3,
         child: Material(
           color: Colors.transparent,
@@ -40,7 +40,7 @@ class BottomNavBarItem extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 105, //5px black bar on selected
+                bottom: 59, //5px black bar on selected
                 width: MediaQuery.of(context).size.width / 3,
                 height: MediaQuery.of(context).size.height,
                 child: SizedBox(

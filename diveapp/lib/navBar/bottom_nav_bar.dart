@@ -17,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 110,
+      height: 64,
       child: Material(
         color: Colors.transparent,
         child: Stack(
