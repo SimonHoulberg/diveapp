@@ -55,7 +55,7 @@ class _DiveLogPageState extends State<DiveLogPage> {
               body: logSize > 0
                   ? Padding(
                       // Added padding to bottom to avoid cards placed underneath bottom nav bar
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 96),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 64),
                       child: Column(
                         children: <Widget>[
                           Expanded(
