@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dive_log_info_page.dart';
 
 class DiveLogPage extends StatefulWidget {
   @override
@@ -90,10 +91,15 @@ class _DiveLogPageState extends State<DiveLogPage> {
                                             trailing: Icon(
                                                 Icons.keyboard_arrow_right),
                                             onTap: () {
-                                              // Show PopUp
-                                              // showDialog(
-                                              //     context: context,
-                                              //     child: GraphCard());
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DiveLogInfoPage(
+                                                          dive_id:
+                                                              '${dive['name']}',
+                                                        )),
+                                              );
                                             }),
                                         _buildDivider(),
                                         //ListTile(

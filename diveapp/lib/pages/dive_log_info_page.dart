@@ -1,24 +1,15 @@
+import 'package:diveapp/widgets/graph_card.dart';
 import 'package:flutter/material.dart';
+import 'package:bezier_chart/bezier_chart.dart';
 
-class DiveLogInfoPage extends StatefulWidget {
-  @override
-  _DiveLogInfoPageState createState() => _DiveLogInfoPageState();
-}
+class DiveLogInfoPage extends StatelessWidget {
+  final String dive_id;
 
-Container _buildDivider() {
-  return Container(
-    margin: const EdgeInsets.symmetric(
-      horizontal: 8.0,
-    ),
-    width: double.infinity,
-    height: 1.0,
-    color: Colors.grey.shade400,
-  );
-}
+  // In the constructor, require a Todo.
+  DiveLogInfoPage({Key key, @required this.dive_id}) : super(key: key);
 
-class _DiveLogInfoPageState extends State<DiveLogInfoPage> {
   // variables to be replaced with database info
-  String diveName = "name",
+  String diveName = "dive_name",
       divelocation = "Location",
       divedate = "date",
       overviewMaxDepth = "Max depth",
@@ -39,7 +30,11 @@ class _DiveLogInfoPageState extends State<DiveLogInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(diveName),
+      ),
+      body: Card(
         elevation: 4.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         color: Colors.white60,
@@ -210,7 +205,6 @@ class _DiveLogInfoPageState extends State<DiveLogInfoPage> {
             SizedBox(
               height: 16,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -334,8 +328,25 @@ class _DiveLogInfoPageState extends State<DiveLogInfoPage> {
                   ]),
                 ])
               ],
+            ),
+            _buildDivider(),
+            Center(
+              child: GraphCard(),
             )
           ],
-        ));
+        ),
+      ),
+    );
   }
+}
+
+Container _buildDivider() {
+  return Container(
+    margin: const EdgeInsets.symmetric(
+      horizontal: 8.0,
+    ),
+    width: double.infinity,
+    height: 1.0,
+    color: Colors.grey.shade400,
+  );
 }

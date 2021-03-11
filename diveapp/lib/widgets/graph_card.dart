@@ -46,28 +46,8 @@ class _GraphCardState extends State<GraphCard> {
                     elevation: 4.0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0)),
-                    color: Theme.of(context).primaryColor,
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      child: Center(
-                        child: Text(
-                          "Dive graph", //TODO
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Card(
-                    elevation: 4.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height / 3,
                       width: MediaQuery.of(context).size.width,
                       child: BezierChart(
                         bezierChartScale: BezierChartScale.CUSTOM,
