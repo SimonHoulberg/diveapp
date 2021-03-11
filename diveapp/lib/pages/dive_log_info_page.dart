@@ -1,6 +1,5 @@
 import 'package:diveapp/widgets/graph_card.dart';
 import 'package:flutter/material.dart';
-import 'package:bezier_chart/bezier_chart.dart';
 
 class DiveLogInfoPage extends StatelessWidget {
   final String dive_id;
@@ -330,9 +329,10 @@ class DiveLogInfoPage extends StatelessWidget {
               ],
             ),
             _buildDivider(),
-            Center(
-              child: GraphCard(),
-            )
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 4,
+              child: GraphCard.withSampleData(),
+            ),
           ],
         ),
       ),
