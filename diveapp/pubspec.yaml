@@ -31,6 +31,8 @@ dependencies:
     path: ./auth
 
   fluttertoast: ^7.1.5
+  audioplayers: ^0.13.2
+  vibration: ^1.7.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,7 +63,7 @@ flutter:
 
   # this loads all assets from assets/ folder (pictures, etc)
   assets:
-    - assets/
+  - assets/alert.mp3
     
 
   # To add custom fonts to your application, add a fonts section here,

@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:vibration/vibration.dart';
+
 class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -156,10 +159,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Icons.textsms,
                                     color: Theme.of(context).primaryColor,
                                   ),
-                                  title: Text("Setting example"), //TODO
+                                  title: Text("Notification test"),
                                   trailing: Icon(Icons.keyboard_arrow_right),
                                   onTap: () {
-                                    //TODO
+                                    _playSound("alert.mp3");
+                                    _vibrate();
+                                    _flashScreen(
+                                        context, "Error message example");
                                   },
                                 ),
                                 _buildDivider(),
@@ -276,5 +282,75 @@ class _SettingsPageState extends State<SettingsPage> {
       height: 1.0,
       color: Colors.grey.shade400,
     );
+  }
+
+  void _playSound(var sound) async {
+    AudioCache player = AudioCache();
+    await player.play(sound);
+  }
+
+  void _vibrate() async {
+    if (await Vibration.hasVibrator()) {
+      Vibration.vibrate();
+    }
+  }
+
+  void _flashScreen(BuildContext context, var errorMsg) {
+    var blink = true;
+    var flashingCount = 0;
+    var maxFlashingCount = 3;
+    OverlayEntry overlay;
+    overlay = OverlayEntry(builder: (context) {
+      return Positioned(
+        left: 0,
+        right: 0,
+        child: Container(
+          color: Colors.black,
+          child: GestureDetector(
+            onTap: () {
+              blink = null;
+              overlay.remove();
+            },
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                Future.delayed(Duration(milliseconds: 700)).then((_) {
+                  if (blink != null) setState(() => blink = !blink);
+                  flashingCount++;
+                  if (flashingCount > maxFlashingCount) {
+                    blink = null;
+                    flashingCount = 0;
+                    overlay.remove();
+                  }
+                });
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    border: Border.all(
+                        color: blink ? Colors.red : Colors.black, width: 8),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 16,
+                  ),
+                  child: Text(
+                    errorMsg,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      inherit: false,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+    });
+    Overlay.of(context).insert(overlay);
   }
 }

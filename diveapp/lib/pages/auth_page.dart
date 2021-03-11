@@ -103,7 +103,7 @@ class _AuthPageState extends State<AuthPage> {
               text: 'Sign in with google',
               size: Size(double.infinity, 50.0),
               icon: new Image.asset(
-                'assets/google-icon.png',
+                'google-icon.png',
                 height: 18.0,
                 width: 18.0,
                 fit: BoxFit.fill,
