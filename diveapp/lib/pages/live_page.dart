@@ -220,7 +220,7 @@ class _LivePageState extends State<LivePage> {
                               height: 24,
                               width: 72,
                               child: Center(
-                                  child: Text("Issues: " + "X",
+                                  child: Text("Issues: " + "X", // TODO add var
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -352,7 +352,9 @@ class _LivePageState extends State<LivePage> {
                                                         .primaryColorLight;
                                                   })),
                                                   onPressed: () {
-                                                    // TODO
+                                                    // Find bluetooth devices
+
+                                                    // Initiate FlutterBlue instance
                                                   },
                                                   child: Text("Add Device")),
                                             ))),
