@@ -1,10 +1,6 @@
-import 'package:diveapp/composition_root.dart';
 import 'package:diveapp/pages/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/flutter_cubit.dart';
-import 'package:diveapp/states_management/auth/auth_cubit.dart';
-import 'package:diveapp/states_management/auth/auth_state.dart';
 import 'package:diveapp/widgets/custom_flat_button.dart';
 import 'package:diveapp/widgets/custom_outline_button.dart';
 import 'package:diveapp/widgets/custom_text_field.dart';
@@ -237,7 +233,7 @@ class _AuthPageState extends State<AuthPage> {
   signup(email, password, name) async {
     var url = "http://localhost:5000/signup"; // iOS
     final http.Response response = await http.post(
-      url,
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -263,8 +259,7 @@ class _AuthPageState extends State<AuthPage> {
     } else
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => CompositionRoot.composeAuthUi()),
+        MaterialPageRoute(builder: (context) => AuthPage()),
       );
 
     await prefs.setString('token', parse["token"]);
@@ -311,7 +306,7 @@ class _AuthPageState extends State<AuthPage> {
   login(email, password) async {
     var url = "http://localhost:5000/login"; // iOS
     final http.Response response = await http.post(
-      url,
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -338,8 +333,7 @@ class _AuthPageState extends State<AuthPage> {
     } else
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => CompositionRoot.composeAuthUi()),
+        MaterialPageRoute(builder: (context) => AuthPage()),
       );
   }
 

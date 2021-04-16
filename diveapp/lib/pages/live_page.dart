@@ -7,6 +7,7 @@ import 'package:diveapp/models/dive_device.dart';
 import 'package:diveapp/models/dive_entry.dart';
 import 'package:diveapp/models/dive_session.dart';
 import 'package:diveapp/models/user.dart';
+import 'package:diveapp/pages/add_dive_device_page.dart';
 import 'package:diveapp/widgets/custom_live_data_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class _LivePageState extends State<LivePage> {
 
     var url = "http://localhost:5000/add-dive"; // iOS
     final http.Response response = await http.post(
-      url,
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -167,7 +168,7 @@ class _LivePageState extends State<LivePage> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-        isMaterialAppTheme: true,
+        //isMaterialAppTheme: true,
         data: ThemeData(brightness: Brightness.light),
         child: Column(
           children: [
@@ -352,9 +353,11 @@ class _LivePageState extends State<LivePage> {
                                                         .primaryColorLight;
                                                   })),
                                                   onPressed: () {
-                                                    // Find bluetooth devices
-
-                                                    // Initiate FlutterBlue instance
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                Add_Dive_Device_Page()));
                                                   },
                                                   child: Text("Add Device")),
                                             ))),

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:diveapp/composition_root.dart';
+import 'package:diveapp/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token");
     var response = await http.get(
-      "http://localhost:5000/user",
+      Uri.parse("http://localhost:5000/user"),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
             userName = decoded["name"];
 
             return Theme(
-              isMaterialAppTheme: true,
+              // isMaterialAppTheme: true,
               data: ThemeData(
                 brightness: Brightness.light,
               ),
@@ -128,8 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompositionRoot.composeAuthUi()),
+                                          builder: (context) => AuthPage()),
                                     );
                                   },
                                 ),

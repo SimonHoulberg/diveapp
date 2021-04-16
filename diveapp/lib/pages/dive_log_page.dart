@@ -12,7 +12,7 @@ class _DiveLogPageState extends State<DiveLogPage> {
   int logSize = 0;
 
   Future<String> getData() async {
-    var response = await http.get("http://localhost:5000/dives");
+    var response = await http.get(Uri.parse("http://localhost:5000/dives"));
     return response.body;
   }
 
