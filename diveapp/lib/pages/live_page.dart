@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:diveapp/models/attendee.dart';
 import 'package:diveapp/models/dive_device.dart';
 import 'package:diveapp/models/dive_entry.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mock_data/mock_data.dart';
+import 'package:vibration/vibration.dart';
 
 class LivePage extends StatefulWidget {
   LivePage({Key key}) : super(key: key);
@@ -29,19 +31,108 @@ class _LivePageState extends State<LivePage> {
 
   bool runBuild = false;
   Icon _fabIcon = Icon(Icons.play_arrow);
+  int counterForTrigger = 0;
+
+  //Notification sound for simulation
+  void _playSound(var sound) async {
+    AudioCache player = AudioCache();
+    await player.play(sound);
+  }
+
+//Notification vibration for simulation
+  void _vibrate() async {
+    if (await Vibration.hasVibrator()) {
+      Vibration.vibrate();
+    }
+  }
+
+//Notification UI for simulation
+  void _flashScreen(BuildContext context, var errorMsg) {
+    var blink = true;
+    var flashingCount = 0;
+    var maxFlashingCount = 5;
+    OverlayEntry overlay;
+    overlay = OverlayEntry(builder: (context) {
+      return Positioned(
+        left: 0,
+        right: 0,
+        child: Container(
+          color: Colors.black,
+          child: GestureDetector(
+            onTap: () {
+              blink = null;
+              overlay.remove();
+            },
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                Future.delayed(Duration(milliseconds: 700)).then((_) {
+                  if (blink != null) setState(() => blink = !blink);
+                  flashingCount++;
+                  if (flashingCount > maxFlashingCount) {
+                    blink = null;
+                    flashingCount = 0;
+                    overlay.remove();
+                  }
+                });
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    border: Border.all(
+                        color: blink ? Colors.red : Colors.black, width: 8),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 16,
+                  ),
+                  child: Text(
+                    errorMsg,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      inherit: false,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+    });
+    Overlay.of(context).insert(overlay);
+  }
+
   //Recursive method to update state every 1 second
   void _timer() {
     Future.delayed(Duration(seconds: 1)).then((_) {
       int index = _random.nextInt(6);
-      //initializes depth if null, or reset to 0 if above 15 (also sets max depth before reset)
-      if (mockList[index].depth == null || mockList[index].depth > 15) {
-        if (mockList[index].depth != null) {
-          mockList[index].bottomDive = mockList[index].depth;
-          mockList[index].status = "UP";
-        }
-        mockList[index].depth = 0;
+      counterForTrigger += 1;
+      // if the counter is 10 trigger notification
+      if (counterForTrigger > 9) {
+        mockList[index].depth += 35;
+        _playSound("alert.mp3");
+        _vibrate();
+        _flashScreen(
+            context,
+            mockList[index].connectedUser.name +
+                " diving too deep! Current depth: " +
+                mockList[index].depth.toString());
+        counterForTrigger = 0;
       } else {
-        mockList[index].status = "DW";
+        //initializes depth if null, or reset to 0 if above 25 (also sets max depth before reset)
+        if (mockList[index].depth == null || mockList[index].depth > 25) {
+          if (mockList[index].depth != null) {
+            mockList[index].bottomDive = mockList[index].depth;
+            mockList[index].status = "UP";
+          }
+          mockList[index].depth = 0;
+        } else {
+          mockList[index].status = "DW";
+        }
       }
 
       mockList[index].depth = // set the depth of the linked device
@@ -135,10 +226,12 @@ class _LivePageState extends State<LivePage> {
     super.dispose();
   }
 
+  // Sends the given json string to the database via backend running on localhost.
   _sendDiveToDatabase(json) async {
-    //print(json);
-
+    // Setting up the url for the http package
     var url = "http://localhost:5000/add-dive"; // iOS
+
+    // Post the json to the above url
     final http.Response response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
@@ -147,6 +240,7 @@ class _LivePageState extends State<LivePage> {
       body: json,
     );
 
+    // Show toast to inform user of success
     _showToast(response.body);
   }
 
@@ -262,6 +356,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(-0.9, 0.0),
                               child: Text("Name",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
@@ -270,6 +365,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(-0.3, 0.0),
                               child: Text("Depth",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
@@ -278,6 +374,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(0.0, 0.0),
                               child: Text("NDL-time",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
@@ -286,6 +383,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(0.3, 0.0),
                               child: Text("Directions",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
@@ -294,6 +392,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(0.6, 0.0),
                               child: Text("Dive time",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
@@ -302,6 +401,7 @@ class _LivePageState extends State<LivePage> {
                               alignment: Alignment(0.9, 0.0),
                               child: Text("Status",
                                   style: TextStyle(
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )),
